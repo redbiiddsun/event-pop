@@ -1,0 +1,15 @@
+version: '0.1'
+services:
+  postgres:
+    image: postgres:9.6
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: eventpop
+      POSTGRES_PASSWORD: eventpop
+      POSTGRES_DB: eventpop
+    volumes:
+      - ./data:/var/lib/postgresql/data
+
+
+
