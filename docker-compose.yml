@@ -6,9 +6,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: cpespace
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: adminpassword
+      POSTGRES_DB: eventpop
+      POSTGRES_USER: eventpop
+      POSTGRES_PASSWORD: eventpop
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
