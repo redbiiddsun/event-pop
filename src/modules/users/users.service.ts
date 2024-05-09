@@ -15,7 +15,6 @@ import { PrismaService } from 'nestjs-prisma';
 import { ConfigService } from '@nestjs/config';
 import { prismaExclude } from 'src/utils/prismaExclude';
 import { User } from '@prisma/client';
-import { CustomResponse } from 'src/common/interceptors/response.interceptor';
 
 @Injectable()
 export class UsersService {
@@ -24,7 +23,7 @@ export class UsersService {
     private configService: ConfigService,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<CustomResponse<Omit<User, 'password'>>> {
+  async create(createUserDto: CreateUserDto): Promise<Omit<User, 'password'>> {
     const SALT_ROUNDS = this.configService.get('salt_rounds');
 
     const user = await this.prisma.user.findUnique({ where: { email: createUserDto.email }});
@@ -38,38 +37,27 @@ export class UsersService {
     createUserDto.password = hashedPassword;
     createUserDto.birthdate = new Date(createUserDto.birthdate);
 
-    const result = await this.prisma.user.create({ data: createUserDto, select: prismaExclude('User', ['password']) });
-
-    return { statusCode: 201, message: 'User created successfully', data: result};
+    return this.prisma.user.create({ data: createUserDto, select: prismaExclude('User', ['password']) });
   }
 
-  async findAll(): Promise<CustomResponse<Omit<User, 'password'>[]>> {
-
-    const result = await this.prisma.user.findMany({select: prismaExclude('User', ['password'])});
-
-    return { statusCode: 200, message: 'Display all users', data: result};
+  async findAll(): Promise<Omit<User, 'password'>[]> {
+    return this.prisma.user.findMany({select: prismaExclude('User', ['password'])});
   }
 
-  async findOne(id: string): Promise<CustomResponse<Omit<User, 'password'>>> {
+  async findOne(id: string): Promise<Omit<User, 'password'>> {
 
-    const result = await this.prisma.user.findFirst({where: { id }, select: prismaExclude('User', ['password'])});
-
-    return { statusCode: 201, message: 'User created successfully', data: result};
+    return this.prisma.user.findFirst({where: { id }, select: prismaExclude('User', ['password'])});
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
 
-  async remove(id: string): Promise<CustomResponse<Omit<User, 'password'>>> {
+  async remove(id: string): Promise<Omit<User, 'password'>> {
 
-    //Check if user exists
     const user = await this.prisma.user.findUnique({ where: { id }});
     if (!user) throw new HttpException('User doesn not exists', HttpStatus.BAD_REQUEST);
 
-
-    const result = await this.prisma.user.delete({where: { id }, select: prismaExclude('User', ['password'])});
-
-    return { statusCode: 200, message: `Delete user ${id} successfully `, data: result};
+    return this.prisma.user.delete({where: { id }, select: prismaExclude('User', ['password'])});
   }
 }
