@@ -2,12 +2,15 @@ import { Module } from '@nestjs/common';
 
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from 'nestjs-prisma';
+import { UsersModule } from './modules/users/users.module';
+import { UsersService } from './modules/users/users.service';
 
 import configuration from './config/configuration';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
+      isGlobal: true,
       load: [configuration],
     }),
     PrismaModule.forRoot({
@@ -24,8 +27,9 @@ import configuration from './config/configuration';
         },
       },
     }),
+    UsersModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [UsersService],
 })
 export class AppModule {}
