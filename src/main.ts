@@ -14,8 +14,6 @@ async function bootstrap() {
 
   app.use(cookieParser());
 
-
-
   const config = new DocumentBuilder()
     .setTitle('EventPop API')
     .setDescription('The EventPop API description for developers')
