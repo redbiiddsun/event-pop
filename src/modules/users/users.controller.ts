@@ -5,7 +5,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { TransformInterceptor } from 'src/common/interceptors/response.interceptor';
 
 @Controller('users')
-@UseInterceptors(TransformInterceptor)
+// @UseInterceptors(TransformInterceptor)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
