@@ -1,11 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, Res, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { TransformInterceptor } from 'src/common/interceptors/response.interceptor';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { Request } from 'express';
 
 @Controller('users')
-@UseInterceptors(TransformInterceptor)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -17,6 +18,12 @@ export class UsersController {
   @Get()
   findAll() {
     return this.usersService.findAll();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  profile(@Req() req: Request) {
+    return req.user;
   }
 
   @Get(':id')
