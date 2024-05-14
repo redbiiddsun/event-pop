@@ -1,15 +1,18 @@
-version: '0.1'
+version: "1.0"
+
 services:
-  postgres:
-    image: postgres:9.6
+  database:
+    container_name: postgres-db
+    image: postgres:16
+    restart: always
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: eventpop
-      POSTGRES_PASSWORD: eventpop
       POSTGRES_DB: eventpop
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpassword
     volumes:
-      - ./data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
 
-
-
+volumes:
+  postgres_data:

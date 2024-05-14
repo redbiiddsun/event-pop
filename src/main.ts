@@ -1,5 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
+import * as cookieParser from 'cookie-parser';
+
 
 import { AppModule } from './app.module';
 import configuration from './config/configuration';
@@ -7,9 +10,13 @@ import configuration from './config/configuration';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.useGlobalPipes(new ValidationPipe());
+
+  app.use(cookieParser());
+
   const config = new DocumentBuilder()
-    .setTitle('Cats example')
-    .setDescription('The cats API description')
+    .setTitle('EventPop API')
+    .setDescription('The EventPop API description for developers')
     .setVersion('1.0')
     .addTag('cats')
     .build();
